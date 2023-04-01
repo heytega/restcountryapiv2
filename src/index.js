@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import { AppProvider } from './Context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from 'react-query-devtools';
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ root.render(
       <AppProvider>
         <App />
       </AppProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>
 );
