@@ -15,7 +15,8 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import useCountries from '../query-hooks/useCountries';
+import useRegion from '../query-hooks/useRegion';
+import { Collections } from '@mui/icons-material';
 
 const allUrl = 'https://restcountries.com/v3.1/all';
 // const regionUrl = "https://restcountries.com/v3.1/region/";
@@ -72,57 +73,42 @@ const Home = ({ loading, setLoading }) => {
   // Data initializations
 
   const [countries, setCountries] = useState([]);
-  const [region, setRegion] = useState('');
+  const [regionName, setRegionName] = useState('africa');
   const [search, setSearch] = useState('');
 
   // Methods & functions
 
   // Fetch all Countries
 
-  // const fetchCountriesData = async () => {
+  // const fetchRegionData = async (regionName) => {
   //   setLoading(true);
   //   try {
-  //     const res = await fetch(allUrl);
+  //     const res = await fetch(
+  //       `https://restcountries.com/v3.1/region/${regionName}`
+  //     );
   //     if (res.ok) {
   //       const data = await res.json();
   //       setCountries(data);
   //       setLoading(false);
   //     }
   //   } catch (error) {
-  //     // alert("Error Encountered");
-  //     console.log(error);
+  //     alert('error while fetching region');
+  //   }
+
+  //   if (regionName === 'all') {
+  //     setLoading(true);
+  //     try {
+  //       const res = await fetch(allUrl);
+  //       if (res.ok) {
+  //         const info = await res.json();
+  //         setCountries(info);
+  //         setLoading(false);
+  //       }
+  //     } catch (error) {
+  //       alert('error while fetching all region');
+  //     }
   //   }
   // };
-
-  const fetchRegionData = async (regionName) => {
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://restcountries.com/v3.1/region/${regionName}`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setCountries(data);
-        setLoading(false);
-      }
-    } catch (error) {
-      alert('error while fetching region');
-    }
-
-    if (regionName === 'all') {
-      setLoading(true);
-      try {
-        const res = await fetch(allUrl);
-        if (res.ok) {
-          const info = await res.json();
-          setCountries(info);
-          setLoading(false);
-        }
-      } catch (error) {
-        alert('error while fetching all region');
-      }
-    }
-  };
 
   const fetchNameData = async (countryName) => {
     setLoading(true);
@@ -141,17 +127,20 @@ const Home = ({ loading, setLoading }) => {
   };
   // METHOD AND FUNCTION
 
-  // Assign Fetched data from the Query hook to
-  const countriesQuery = useCountries();
+  // useQuery Hook to FETCH all Countries Data;
+  // const countriesQuery = useCountries();
+  // console.log(countriesQuery);
+
+  //useQuery Hook to Fetch region countries Data
+  const countriesQuery = useRegion(regionName);
   console.log(countriesQuery);
-  // setCountries(countriesQuery);
 
   const handleChange = (e) => {
-    setRegion(e.target.value);
-    const init = async () => {
-      await fetchRegionData(e.target.value);
-    };
-    init();
+    setRegionName(e.target.value);
+    // const init = async () => {
+    //   await fetchRegionData(e.target.value);
+    // };
+    // init();
   };
 
   const handleSearch = (e) => {
@@ -218,7 +207,7 @@ const Home = ({ loading, setLoading }) => {
             <Select
               labelId='demo-simple-select-label'
               id='demo-simple-select'
-              value={region}
+              value={regionName}
               label='Filter by Region'
               onChange={handleChange}
               sx={{ backgroundColor: 'primary.main' }}
@@ -242,7 +231,7 @@ const Home = ({ loading, setLoading }) => {
           {countriesQuery.isError && (
             <Typography>{JSON.stringify(countriesQuery.error)}</Typography>
           )}
-          {countriesQuery.isSuccess && <Countries />}
+          {countriesQuery.isSuccess && <Countries regionName={regionName} />}
           {/* <Countries countries={countries} /> */}
         </Box>
       </Container>

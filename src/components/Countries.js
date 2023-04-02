@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Country from './Country';
 import Grid from '@mui/material/Unstable_Grid2';
-import useCountries from '../query-hooks/useCountries';
+import useRegion from '../query-hooks/useRegion';
 
-const Countries = () => {
-  const countries = useCountries();
+const Countries = ({ regionName }) => {
+  const countries = useRegion(regionName);
   return (
     <>
       <Grid
