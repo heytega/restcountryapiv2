@@ -7,6 +7,11 @@ import useRegion from '../query-hooks/useRegion';
 
 const Countries = ({ regionName }) => {
   const countries = useRegion(regionName);
+  console.log(countries);
+
+  const africa = countries.data.filter((c) => c.name.common.startsWith('Ken'));
+  console.log(africa);
+
   return (
     <>
       <Grid

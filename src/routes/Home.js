@@ -19,7 +19,6 @@ import useRegion from '../query-hooks/useRegion';
 import { Collections } from '@mui/icons-material';
 
 const allUrl = 'https://restcountries.com/v3.1/all';
-// const regionUrl = "https://restcountries.com/v3.1/region/";
 
 // Theme Styling
 
@@ -71,46 +70,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Home = ({ loading, setLoading }) => {
   // Data initializations
-
   const [countries, setCountries] = useState([]);
-  const [regionName, setRegionName] = useState('africa');
+  const [regionName, setRegionName] = useState('all');
   const [search, setSearch] = useState('');
 
   // Methods & functions
 
-  // Fetch all Countries
-
-  // const fetchRegionData = async (regionName) => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(
-  //       `https://restcountries.com/v3.1/region/${regionName}`
-  //     );
-  //     if (res.ok) {
-  //       const data = await res.json();
-  //       setCountries(data);
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     alert('error while fetching region');
-  //   }
-
-  //   if (regionName === 'all') {
-  //     setLoading(true);
-  //     try {
-  //       const res = await fetch(allUrl);
-  //       if (res.ok) {
-  //         const info = await res.json();
-  //         setCountries(info);
-  //         setLoading(false);
-  //       }
-  //     } catch (error) {
-  //       alert('error while fetching all region');
-  //     }
-  //   }
-  // };
-
   const fetchNameData = async (countryName) => {
+    console.log(countryName);
     setLoading(true);
     try {
       const res = await fetch(
@@ -127,31 +94,18 @@ const Home = ({ loading, setLoading }) => {
   };
   // METHOD AND FUNCTION
 
-  // useQuery Hook to FETCH all Countries Data;
-  // const countriesQuery = useCountries();
-  // console.log(countriesQuery);
-
-  //useQuery Hook to Fetch region countries Data
+  //useQuery Hook to Fetch the countries data according to region
   const countriesQuery = useRegion(regionName);
   console.log(countriesQuery);
 
   const handleChange = (e) => {
     setRegionName(e.target.value);
-    // const init = async () => {
-    //   await fetchRegionData(e.target.value);
-    // };
-    // init();
   };
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    fetchNameData(e.target.value);
+    // fetchNameData(e.target.value);
   };
-
-  // Effects
-  // useEffect(() => {
-  //   fetchCountriesData();
-  // }, []);
 
   return (
     <Box
@@ -188,7 +142,7 @@ const Home = ({ loading, setLoading }) => {
               placeholder='Search for a country…'
               inputProps={{ 'aria-label': 'search' }}
               value={search}
-              onChange={handleSearch}
+              onChange={(e) => handleSearch(e)}
             />
           </Search>
 
@@ -232,7 +186,6 @@ const Home = ({ loading, setLoading }) => {
             <Typography>{JSON.stringify(countriesQuery.error)}</Typography>
           )}
           {countriesQuery.isSuccess && <Countries regionName={regionName} />}
-          {/* <Countries countries={countries} /> */}
         </Box>
       </Container>
     </Box>
